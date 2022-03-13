@@ -91,4 +91,6 @@ void selectionSort(int *a, size_t n);
 
 void insertionSort(int *a, size_t n);
 
+void combSort(int *a, size_t n);
+
 #endif

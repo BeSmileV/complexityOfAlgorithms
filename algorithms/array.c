@@ -7,6 +7,8 @@
 
 #include "array.h"
 
+#define K_FOR_COMB_SORT 1.24733
+
 void inputArray_(int *const a, const size_t n) {
     for (size_t i = 0; i < n; i++)
         scanf("%d", &a[i]);
@@ -213,7 +215,7 @@ void selectionSort(int *a, size_t n) {
     for (size_t i = 0; i < n - 1; i++) {
         size_t indexMin = i;
         for (size_t j = i; j < n; j++)
-            if (*(a + j) < *(a + indexMin))
+            if (a[j] < a[indexMin])
                 indexMin = j;
         swap(a + i, a + indexMin);
     }
@@ -228,5 +230,21 @@ void insertionSort(int *a, size_t n) {
             indexRead--;
         }
         a[indexRead + 1] = t;
+    }
+}
+
+void combSort(int *a, size_t n) {
+    size_t s = n;
+    bool swapped = true;
+    while (s > 1 || swapped) {
+        if (s > 1)
+            s /= K_FOR_COMB_SORT;
+        swapped = false;
+        for (size_t i = 0, j = i + s; j < n; i++, j++) {
+            if(a[i] > a[j]){
+                swap(a + i, a + j);
+                swapped = true;
+            }
+        }
     }
 }
