@@ -63,8 +63,8 @@ void timeExperiment() {
     // описание функций сортировки
     SortFunc sorts[] = {
 //            {bubbleSort, "bubbleSort"},
-            {selectionSort, "selectionSort"},
-//            {insertionSort, "insertionSort"}
+//            {selectionSort, "selectionSort"},
+            {insertionSort, "insertionSort"}
     };
     const unsigned FUNCS_N = ARRAY_SIZE (sorts);
     // описание функций генерации
