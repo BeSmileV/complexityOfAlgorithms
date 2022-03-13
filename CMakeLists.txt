@@ -3,4 +3,4 @@ project(complexityOfAlgorithms C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(complexityOfAlgorithms main.c)
+add_executable(complexityOfAlgorithms main.c algorithms/array.h algorithms/array.c)
