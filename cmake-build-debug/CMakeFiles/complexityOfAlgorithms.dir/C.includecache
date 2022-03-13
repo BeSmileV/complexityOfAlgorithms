@@ -6,22 +6,6 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/Sergey Bondarenko/CLionProjects/complexityOfAlgorithms/algorithms/array.c
-stdio.h
--
-limits.h
--
-assert.h
--
-stdbool.h
--
-stdlib.h
--
-time.h
--
-array.h
-C:/Users/Sergey Bondarenko/CLionProjects/complexityOfAlgorithms/algorithms/array.h
-
 C:/Users/Sergey Bondarenko/CLionProjects/complexityOfAlgorithms/algorithms/array.h
 
 C:/Users/Sergey Bondarenko/CLionProjects/complexityOfAlgorithms/main.c
