@@ -93,4 +93,6 @@ void insertionSort(int *a, size_t n);
 
 void combSort(int *a, size_t n);
 
+void shellSort(int *array, int size);
+
 #endif

@@ -241,10 +241,19 @@ void combSort(int *a, size_t n) {
             s /= K_FOR_COMB_SORT;
         swapped = false;
         for (size_t i = 0, j = i + s; j < n; i++, j++) {
-            if(a[i] > a[j]){
+            if (a[i] > a[j]) {
                 swap(a + i, a + j);
                 swapped = true;
             }
+        }
+    }
+}
+
+void shellSort(int *a, int n){
+    for(int s = n / 2; s > 0; s /= 2){
+        for(int i = s; i < n; i++){
+            for(int j = i - s; j >= 0 && a[j] > a[j + s]; j -= s)
+                swap(a + j, a + j + s);
         }
     }
 }
