@@ -145,34 +145,34 @@ void swap(int *a, int *b) {
     *b = t;
 }
 
-long long max2(long long int a, long long int b){
+long long max2(long long int a, long long int b) {
     return a > b ? a : b;
 }
 
 void mergeOfUniqueElement(const int *a, const size_t sizeA, const int *b, const size_t sizeB, int *c, size_t *sizeC) {
     int indexA = 0;
     int indexB = 0;
-    while(indexA < sizeA && indexB < sizeB){
-        if(a[indexA] < b[indexB])
+    while (indexA < sizeA && indexB < sizeB) {
+        if (a[indexA] < b[indexB])
             append_(c, sizeC, a[indexA++]);
-        else if(a[indexA] > b[indexB])
+        else if (a[indexA] > b[indexB])
             append_(c, sizeC, b[indexB++]);
         else
             indexA++;
     }
 
-    if(indexA < sizeA)
-        while(indexA < sizeA)
+    if (indexA < sizeA)
+        while (indexA < sizeA)
             append_(c, sizeC, a[indexA++]);
     else
-        while(indexB < sizeB)
+        while (indexB < sizeB)
             append_(c, sizeC, b[indexB++]);
 
 }
 
-bool isOrdered(const int *a, size_t n){
-    for(size_t i = 1; i < n; i++)
-        if(a[i] < a[i - 1])
+bool isOrdered(const int *a, size_t n) {
+    for (size_t i = 1; i < n; i++)
+        if (a[i] < a[i - 1])
             return false;
 
     return true;
@@ -180,43 +180,50 @@ bool isOrdered(const int *a, size_t n){
 
 // algorithms of generate
 
-void generateRandomArray(int *a, size_t n){
+void generateRandomArray(int *a, size_t n) {
     srand(time(NULL));
-    for(size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
         a[i] = rand();
 }
 
-void generateOrderedArray(int *a, size_t n){
+void generateOrderedArray(int *a, size_t n) {
     srand(time(NULL));
     a[0] = rand();
-    for(size_t i = 1; i < n; i++)
+    for (size_t i = 1; i < n; i++)
         a[i] = rand() + a[i - 1];
 }
 
-void generateOrderedBackwards(int *a, size_t n){
+void generateOrderedBackwards(int *a, size_t n) {
     srand(time(NULL));
     a[n - 1] = rand();
-    for(int i = n - 2; i >= 0; i--)
+    for (int i = n - 2; i >= 0; i--)
         a[i] = rand() + a[i + 1];
 }
 
 // algorithms of Sorting
 
-void selectionSort(int *a, size_t n){
-    for(size_t i = 0; i < n - 1; i++) {
-        size_t indexMin  = i;
+void bubbleSort(int *a, size_t size) {
+    for (size_t i = 0; i < size - 1; i++)
+        for (size_t j = size - 1; j > i; j--)
+            if (a[j - 1] > a[j])
+                swap(&a[j - 1], &a[j]);
+}
+
+void selectionSort(int *a, size_t n) {
+    for (size_t i = 0; i < n - 1; i++) {
+        size_t indexMin = i;
         for (size_t j = i; j < n; j++)
-            if(*(a + j) < *(a + indexMin))
+            if (*(a + j) < *(a + indexMin))
                 indexMin = j;
         swap(a + i, a + indexMin);
     }
 }
 
-void insertionSort(int *a, size_t n){
-    for(int i = 1; i < n; i++) {
+void insertionSort(int *a, size_t n) {
+    for (int i = 1; i < n; i++) {
         int t = a[i];
         int indexRead = i - 1;
-        while(indexRead > -1 && a[indexRead] > t) {
+        while (indexRead > -1 && a[indexRead] > t) {
             a[indexRead + 1] = a[indexRead];
             indexRead--;
         }

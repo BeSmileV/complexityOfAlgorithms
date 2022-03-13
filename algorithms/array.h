@@ -85,6 +85,8 @@ void generateOrderedBackwards(int *a, size_t n);
 
 // algorithms of generate
 
+void bubbleSort ( int *a, size_t size );
+
 void selectionSort(int *a, size_t n);
 
 void insertionSort(int *a, size_t n);

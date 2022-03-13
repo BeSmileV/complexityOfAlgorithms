@@ -62,8 +62,9 @@ void checkTime(void (*sortFunc)(int *, size_t),
 void timeExperiment() {
     // описание функций сортировки
     SortFunc sorts[] = {
-            {selectionSort, "selectionSort"},
-            {insertionSort, "insertionSort"}
+            {bubbleSort, "bubbleSort"},
+//            {selectionSort, "selectionSort"},
+//            {insertionSort, "insertionSort"}
     };
     const unsigned FUNCS_N = ARRAY_SIZE (sorts);
     // описание функций генерации
