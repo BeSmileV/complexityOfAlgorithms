@@ -201,9 +201,9 @@ void generateOrderedBackwards(int *a, size_t n) {
 
 // algorithms of Sorting
 
-void bubbleSort(int *a, size_t size) {
-    for (size_t i = 0; i < size - 1; i++)
-        for (size_t j = size - 1; j > i; j--)
+void bubbleSort(int *a, size_t n) {
+    for (size_t i = 0; i < n - 1; i++)
+        for (size_t j = n - 1; j > i; j--)
             if (a[j - 1] > a[j])
                 swap(&a[j - 1], &a[j]);
 }
@@ -284,4 +284,109 @@ void digitalSort(int *a, size_t n) {
         memcpy(a, buf, sizeof(int) * n);
     }
     free(buf);
+}
+
+long long getBubbleSortNComp(int *a, size_t n) {
+    long long nCom = 0;
+    for (size_t i = 0; ++nCom && i < n - 1; i++)
+        for (size_t j = n - 1; ++nCom && j > i; j--)
+            if (++nCom && a[j - 1] > a[j])
+                swap(&a[j - 1], &a[j]);
+
+    return nCom;
+}
+
+long long getSelectionSortNComp(int *a, size_t n) {
+    long long nCom = 0;
+    for (size_t i = 0; ++nCom && i < n - 1; i++) {
+        size_t indexMin = i;
+        for (size_t j = i; ++nCom && j < n; j++)
+            if (++nCom && a[j] < a[indexMin])
+                indexMin = j;
+        swap(a + i, a + indexMin);
+    }
+
+    return nCom;
+}
+
+long long getInsertionSortNComp(int *a, size_t n) {
+    long long nCom = 0;
+    for (int i = 1; ++nCom && i < n; i++) {
+        int t = a[i];
+        int indexRead = i - 1;
+        while (++nCom && indexRead > -1 && a[indexRead] > t) {
+            a[indexRead + 1] = a[indexRead];
+            indexRead--;
+        }
+        a[indexRead + 1] = t;
+    }
+
+    return nCom;
+}
+
+
+long long getCombSortNComp(int *a, size_t n){
+    long long nCom = 0;
+    size_t s = n;
+    bool swapped = true;
+    while (++nCom && s > 1 || swapped) {
+        if (++nCom && s > 1)
+            s /= K_FOR_COMB_SORT;
+        swapped = false;
+        for (size_t i = 0, j = i + s; ++nCom && j < n; i++, j++) {
+            if (++nCom && a[i] > a[j]) {
+                swap(a + i, a + j);
+                swapped = true;
+            }
+        }
+    }
+
+    return nCom;
+}
+
+long long getShellSortNComp(int *a, size_t n){
+    long long nCom = 0;
+    for (int s = n / 2; ++nCom && s > 0; s /= 2) {
+        for (int i = s; ++nCom && i < n; i++) {
+            for (int j = i - s; (nCom += 2) && j >= 0 && a[j] > a[j + s]; j -= s)
+                swap(a + j, a + j + s);
+        }
+    }
+
+    return nCom;
+}
+
+long long getDigitalSortNComp(int *a, size_t n){
+    long long nCom = 0;
+    size_t countOfStep = sizeof(int);
+    int *buf = (int *) malloc(sizeof(int) * n);
+    for (size_t s = 0; ++nCom && s < countOfStep; s++) {
+        int countOfLastEightBits[512 + 1] = {0};
+        int positionOfLastEightBits[512 + 1] = {0};
+        for (size_t i = 0; ++nCom && i < n; i++) {
+            int lastEightBits = (a[i] >> (s * 8)) & ((1 << 8) - 1);
+            if (++nCom && a[i] >> 31)
+                countOfLastEightBits[256 - lastEightBits]++;
+            else
+                countOfLastEightBits[256 + 1 + lastEightBits]++;
+        }
+        for (size_t i = 1; ++nCom && i < 513; i++)
+            positionOfLastEightBits[i] = positionOfLastEightBits[i - 1] + countOfLastEightBits[i - 1];
+
+        for (size_t i = 0; ++nCom && i < n; i++) {
+            int lastEightBits = (a[i] >> (s * 8) & ((1 << 8) - 1));
+            if (++nCom && a[i] >> 31) {
+                buf[positionOfLastEightBits[256 - lastEightBits]] = a[i];
+                positionOfLastEightBits[256 - lastEightBits]++;
+            } else {
+                buf[positionOfLastEightBits[257 + lastEightBits]] = a[i];
+                positionOfLastEightBits[257 + lastEightBits]++;
+            }
+        }
+        memcpy(a, buf, sizeof(int) * n);
+    }
+
+    free(buf);
+
+    return nCom;
 }

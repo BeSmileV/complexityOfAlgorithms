@@ -97,4 +97,16 @@ void shellSort(int *array, int size);
 
 void digitalSort(int *a, size_t n);
 
+long long getBubbleSortNComp(int *a, size_t n);
+
+long long getSelectionSortNComp(int *a, size_t n);
+
+long long getInsertionSortNComp(int *a, size_t n);
+
+long long getCombSortNComp(int *a, size_t n);
+
+long long getShellSortNComp(int *a, size_t n);
+
+long long getDigitalSortNComp(int *a, size_t n);
+
 #endif

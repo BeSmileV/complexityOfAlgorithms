@@ -15,7 +15,7 @@
 
 // функция сортировки
 typedef struct SortFunc {
-    void (*sort )(int *a, size_t n);    // указатель на функцию сортировки
+    long long (*getSortNCol )(int *a, size_t n);    // указатель на функцию сортировки
     char name[64];                      // имя сортировки, используемое при выводе
 } SortFunc;
 
@@ -25,7 +25,7 @@ typedef struct GeneratingFunc {
     char name[64];                          // имя генератора, используемое при выводе
 } GeneratingFunc;
 
-void checkTime(void (*sortFunc)(int *, size_t),
+void checkTime(long long (*getSortFuncNCol)(int *, size_t),
                void (*generateFunc)(int *, size_t),
                size_t size, char *experimentName) {
     static size_t runCounter = 1;
@@ -35,13 +35,15 @@ void checkTime(void (*sortFunc)(int *, size_t),
     printf("Run #%zu| ", runCounter++);
     printf("Name : %s\n", experimentName);
     double time;
+    long long nCol;
     TIME_TEST({
-                  sortFunc(innerBuffer, size);
+                  nCol = getSortFuncNCol(innerBuffer, size);
               }, time);
 
     printf(" Status : ");
     if (isOrdered(innerBuffer, size)) {
         printf("OK! Time : %.3f s.\n", time);
+        printf("Number of comparisons : %lld\n", nCol);
         // запись в файл
         char filename[256];
         sprintf(filename, "./data/%s.csv ", experimentName);
@@ -62,12 +64,12 @@ void checkTime(void (*sortFunc)(int *, size_t),
 void timeExperiment() {
     // описание функций сортировки
     SortFunc sorts[] = {
-//            {bubbleSort, "bubbleSort"},
-//            {selectionSort, "selectionSort"},
-//            {insertionSort, "insertionSort"},
-//            {combSort, "combSort"},
-//            {shellSort, "shellSort"},
-            {digitalSort, "digitalSort"}
+            {getBubbleSortNComp, "bubbleSort"},
+            {getSelectionSortNComp, "selectionSort"},
+            {getInsertionSortNComp, "insertionSort"},
+            {getCombSortNComp, "combSort"},
+            {getShellSortNComp, "shellSort"},
+            {getDigitalSortNComp, "digitalSort"}
     };
     const unsigned FUNCS_N = ARRAY_SIZE (sorts);
     // описание функций генерации
@@ -89,7 +91,7 @@ void timeExperiment() {
                 // генерация имени файла
                 char filename[128];
                 sprintf(filename, "%s_%s_time", sorts[i].name, generatingFuncs[j].name);
-                checkTime(sorts[i].sort, generatingFuncs[j].generate, size, filename);
+                checkTime(sorts[i].getSortNCol, generatingFuncs[j].generate, size, filename);
             }
         }
         printf("\n");
