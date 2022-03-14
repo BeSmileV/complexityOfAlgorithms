@@ -95,4 +95,6 @@ void combSort(int *a, size_t n);
 
 void shellSort(int *array, int size);
 
+void digitalSort(int *a, size_t n);
+
 #endif

@@ -66,7 +66,8 @@ void timeExperiment() {
 //            {selectionSort, "selectionSort"},
 //            {insertionSort, "insertionSort"},
 //            {combSort, "combSort"},
-            {shellSort, "shellSort"}
+//            {shellSort, "shellSort"},
+            {digitalSort, "digitalSort"}
     };
     const unsigned FUNCS_N = ARRAY_SIZE (sorts);
     // описание функций генерации

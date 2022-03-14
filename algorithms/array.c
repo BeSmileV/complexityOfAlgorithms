@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <memory.h>
 
 #include "array.h"
 
@@ -189,17 +190,13 @@ void generateRandomArray(int *a, size_t n) {
 }
 
 void generateOrderedArray(int *a, size_t n) {
-    srand(time(NULL));
-    a[0] = rand();
-    for (size_t i = 1; i < n; i++)
-        a[i] = rand() + a[i - 1];
+    for (size_t i = 0; i < n; i++)
+        a[i] = i;
 }
 
 void generateOrderedBackwards(int *a, size_t n) {
-    srand(time(NULL));
-    a[n - 1] = rand();
-    for (int i = n - 2; i >= 0; i--)
-        a[i] = rand() + a[i + 1];
+    for (int i = n - 1; i >= 0; i--)
+        a[i] = i;
 }
 
 // algorithms of Sorting
@@ -249,11 +246,42 @@ void combSort(int *a, size_t n) {
     }
 }
 
-void shellSort(int *a, int n){
-    for(int s = n / 2; s > 0; s /= 2){
-        for(int i = s; i < n; i++){
-            for(int j = i - s; j >= 0 && a[j] > a[j + s]; j -= s)
+void shellSort(int *a, int n) {
+    for (int s = n / 2; s > 0; s /= 2) {
+        for (int i = s; i < n; i++) {
+            for (int j = i - s; j >= 0 && a[j] > a[j + s]; j -= s)
                 swap(a + j, a + j + s);
         }
     }
+}
+
+void digitalSort(int *a, size_t n) {
+    size_t countOfStep = sizeof(int);
+    int *buf = (int *) malloc(sizeof(int) * n);
+    for (size_t s = 0; s < countOfStep; s++) {
+        int countOfLastEightBits[512 + 1] = {0};
+        int positionOfLastEightBits[512 + 1] = {0};
+        for (size_t i = 0; i < n; i++) {
+            int lastEightBits = (a[i] >> (s * 8)) & ((1 << 8) - 1);
+            if (a[i] >> 31)
+                countOfLastEightBits[256 - lastEightBits]++;
+            else
+                countOfLastEightBits[256 + 1 + lastEightBits]++;
+        }
+        for (size_t i = 1; i < 513; i++)
+            positionOfLastEightBits[i] = positionOfLastEightBits[i - 1] + countOfLastEightBits[i - 1];
+
+        for (size_t i = 0; i < n; i++) {
+            int lastEightBits = (a[i] >> (s * 8) & ((1 << 8) - 1));
+            if (a[i] >> 31) {
+                buf[positionOfLastEightBits[256 - lastEightBits]] = a[i];
+                positionOfLastEightBits[256 - lastEightBits]++;
+            } else {
+                buf[positionOfLastEightBits[257 + lastEightBits]] = a[i];
+                positionOfLastEightBits[257 + lastEightBits]++;
+            }
+        }
+        memcpy(a, buf, sizeof(int) * n);
+    }
+    free(buf);
 }
