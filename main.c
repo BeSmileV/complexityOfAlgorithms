@@ -35,15 +35,15 @@ void checkTime(long long (*getSortFuncNCol)(int *, size_t),
     printf("Run #%zu| ", runCounter++);
     printf("Name : %s\n", experimentName);
     double time;
-    long long nCol;
+    long long nComp;
     TIME_TEST({
-                  nCol = getSortFuncNCol(innerBuffer, size);
+                  nComp = getSortFuncNCol(innerBuffer, size);
               }, time);
 
     printf(" Status : ");
     if (isOrdered(innerBuffer, size)) {
         printf("OK! Time : %.3f s.\n", time);
-        printf(" Number of comparisons : %lld\n", nCol);
+        printf(" Number of comparisons : %lld\n", nComp);
         // запись в файл
         char filename[256];
         sprintf(filename, "./data/%s_time.csv ", experimentName);
@@ -56,13 +56,13 @@ void checkTime(long long (*getSortFuncNCol)(int *, size_t),
         fclose(f);
 
         char filename2[256];
-        sprintf(filename2, "./data/%s_NCol.csv ", experimentName);
+        sprintf(filename2, "./data/%s_NComp.csv ", experimentName);
         FILE *f2 = fopen(filename2, "a");
         if (f2 == NULL) {
             printf("FileOpenError %s", filename2);
             exit(1);
         }
-        fprintf(f, "%zu; %lld\n", size, nCol);
+        fprintf(f, "%zu; %lld\n", size, nComp);
         fclose(f);
     } else {
         printf("Wrong !\n");
