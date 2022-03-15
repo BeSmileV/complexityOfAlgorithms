@@ -9,6 +9,9 @@
 #include "array.h"
 
 #define K_FOR_COMB_SORT 1.24733
+#define COUNT_VALUES_OF_LAST_EIGHT_BITS 512
+#define COUNT_BITS_IN_BYTE 8
+#define MASK 0b11111111
 
 void inputArray_(int *const a, const size_t n) {
     for (size_t i = 0; i < n; i++)
@@ -256,30 +259,23 @@ void shellSort(int *a, int n) {
 }
 
 void digitalSort(int *a, size_t n) {
-    size_t countOfStep = sizeof(int);
+    size_t numOfSteps = sizeof(int);
     int *buf = (int *) malloc(sizeof(int) * n);
-    for (size_t s = 0; s < countOfStep; s++) {
-        int countOfLastEightBits[512 + 1] = {0};
-        int positionOfLastEightBits[512 + 1] = {0};
+    for (size_t s = 0; s < numOfSteps; s++) {
+        int countValuesOfLastEightBits[COUNT_VALUES_OF_LAST_EIGHT_BITS] = {0};
+        int positionValuesOfLastEightBits[COUNT_VALUES_OF_LAST_EIGHT_BITS] = {0};
         for (size_t i = 0; i < n; i++) {
-            int lastEightBits = (a[i] >> (s * 8)) & ((1 << 8) - 1);
-            if (a[i] >> 31)
-                countOfLastEightBits[256 - lastEightBits]++;
-            else
-                countOfLastEightBits[256 + 1 + lastEightBits]++;
+            int lastEightBits = a[i] >> (s * COUNT_BITS_IN_BYTE) & MASK;
+            countValuesOfLastEightBits[lastEightBits]++;
         }
-        for (size_t i = 1; i < 513; i++)
-            positionOfLastEightBits[i] = positionOfLastEightBits[i - 1] + countOfLastEightBits[i - 1];
+
+        for (size_t i = 1; i < COUNT_VALUES_OF_LAST_EIGHT_BITS; i++)
+            positionValuesOfLastEightBits[i] = positionValuesOfLastEightBits[i - 1] + countValuesOfLastEightBits[i - 1];
 
         for (size_t i = 0; i < n; i++) {
-            int lastEightBits = (a[i] >> (s * 8) & ((1 << 8) - 1));
-            if (a[i] >> 31) {
-                buf[positionOfLastEightBits[256 - lastEightBits]] = a[i];
-                positionOfLastEightBits[256 - lastEightBits]++;
-            } else {
-                buf[positionOfLastEightBits[257 + lastEightBits]] = a[i];
-                positionOfLastEightBits[257 + lastEightBits]++;
-            }
+            int lastEightBits = a[i] >> (s * COUNT_BITS_IN_BYTE) & MASK;
+            buf[positionValuesOfLastEightBits[lastEightBits]] = a[i];
+            positionValuesOfLastEightBits[lastEightBits]++;
         }
         memcpy(a, buf, sizeof(int) * n);
     }
@@ -358,34 +354,26 @@ long long getShellSortNComp(int *a, size_t n){
 
 long long getDigitalSortNComp(int *a, size_t n){
     long long nCom = 0;
-    size_t countOfStep = sizeof(int);
+    size_t numOfSteps = sizeof(int);
     int *buf = (int *) malloc(sizeof(int) * n);
-    for (size_t s = 0; ++nCom && s < countOfStep; s++) {
-        int countOfLastEightBits[512 + 1] = {0};
-        int positionOfLastEightBits[512 + 1] = {0};
+    for (size_t s = 0; ++nCom && s < numOfSteps; s++) {
+        int countValuesOfLastEightBits[COUNT_VALUES_OF_LAST_EIGHT_BITS] = {0};
+        int positionValuesOfLastEightBits[COUNT_VALUES_OF_LAST_EIGHT_BITS] = {0};
         for (size_t i = 0; ++nCom && i < n; i++) {
-            int lastEightBits = (a[i] >> (s * 8)) & ((1 << 8) - 1);
-            if (++nCom && a[i] >> 31)
-                countOfLastEightBits[256 - lastEightBits]++;
-            else
-                countOfLastEightBits[256 + 1 + lastEightBits]++;
+            int lastEightBits = a[i] >> (s * COUNT_BITS_IN_BYTE) & MASK;
+            countValuesOfLastEightBits[lastEightBits]++;
         }
-        for (size_t i = 1; ++nCom && i < 513; i++)
-            positionOfLastEightBits[i] = positionOfLastEightBits[i - 1] + countOfLastEightBits[i - 1];
+
+        for (size_t i = 1; ++nCom && i < COUNT_VALUES_OF_LAST_EIGHT_BITS; i++)
+            positionValuesOfLastEightBits[i] = positionValuesOfLastEightBits[i - 1] + countValuesOfLastEightBits[i - 1];
 
         for (size_t i = 0; ++nCom && i < n; i++) {
-            int lastEightBits = (a[i] >> (s * 8) & ((1 << 8) - 1));
-            if (++nCom && a[i] >> 31) {
-                buf[positionOfLastEightBits[256 - lastEightBits]] = a[i];
-                positionOfLastEightBits[256 - lastEightBits]++;
-            } else {
-                buf[positionOfLastEightBits[257 + lastEightBits]] = a[i];
-                positionOfLastEightBits[257 + lastEightBits]++;
-            }
+            int lastEightBits = a[i] >> (s * COUNT_BITS_IN_BYTE) & MASK;
+            buf[positionValuesOfLastEightBits[lastEightBits]] = a[i];
+            positionValuesOfLastEightBits[lastEightBits]++;
         }
         memcpy(a, buf, sizeof(int) * n);
     }
-
     free(buf);
 
     return nCom;
